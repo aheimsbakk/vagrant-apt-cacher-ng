@@ -13,7 +13,7 @@ On other Vagrant VMs, add the following to utilize `apt-cacher-ng`. Last line is
 ```
 config.vm.provision "shell", inline: <<-SHELL
   apt-get update; apt-get install -y auto-apt-proxy; apt-get update
-  DEBIAN_FRONTEND=noninteractive apt-get install apt-get dist-upgrade -y
+  DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y
 SHELL
 ```
 
