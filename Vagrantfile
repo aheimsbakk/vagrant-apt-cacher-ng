@@ -5,9 +5,11 @@ Vagrant.configure("2") do |config|
   config.vm.box = "debian/buster64"
 
   config.vm.network "forwarded_port", guest: 3142, host: 3142, host_ip: "0.0.0.0"
+  config.vm.define "buster"
 
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "256"
+    vb.memory = "192"
+    vb.cpus = 1
   end
 
   config.vm.provision "shell", inline: <<-SHELL
