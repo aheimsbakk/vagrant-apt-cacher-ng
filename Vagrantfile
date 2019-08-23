@@ -15,7 +15,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update
     DEBIAN_FRONTEND=noninteractive apt-get install -y apt-cacher-ng auto-apt-proxy
-    grep -q kubernetes /etc/apt-cacher-ng/acng.conf || echo "Remap-k8: k8 ; https://apt.kubernetes.io" >> /etc/apt-cacher-ng/acng.conf
+    grep -q kubernetes /etc/apt-cacher-ng/acng.conf || echo "Remap-k8: apt.kubernetes.io ; https://apt.kubernetes.io" >> /etc/apt-cacher-ng/acng.conf
     systemctl restart apt-cacher-ng
     apt-get update
     apt-get dist-upgrade -y
