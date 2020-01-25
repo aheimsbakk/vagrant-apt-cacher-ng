@@ -10,6 +10,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "386"
     vb.cpus = 1
+    vb.linked_clone = true
   end
 
   config.vm.provision "shell", inline: <<-SHELL
