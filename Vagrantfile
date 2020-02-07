@@ -11,6 +11,7 @@ Vagrant.configure("2") do |config|
     vb.memory = "386"
     vb.cpus = 1
     vb.linked_clone = true
+    vb.default_nic_type = "virtio"
   end
 
   config.vm.provision "shell", inline: <<-SHELL
