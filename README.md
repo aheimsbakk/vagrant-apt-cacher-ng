@@ -27,7 +27,7 @@ SHELL
 
 ### Kubernetes packages
 
-Update `sources.list` with the following line. Change `kubernetes-xenial` to your distro.
+Use the following to enable k8 repos. Change `kubernetes-xenial` to your distro.
 
 ```ruby
 config.vm.provision "shell", inline: <<-SHELL
