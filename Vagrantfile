@@ -8,16 +8,18 @@ Vagrant.configure("2") do |config|
   config.vm.define "buster"
 
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "386"
+    vb.memory = "256"
     vb.cpus = 1
     vb.linked_clone = true
     vb.default_nic_type = "virtio"
   end
 
   config.vm.provision "shell", inline: <<-SHELL
-    apt-get update
     export DEBIAN_FRONTEND=noninteractive
-    apt-get install -y apt-cacher-ng auto-apt-proxy zram-tools unattended-upgrades
+    apt-get update
+    apt-get install -y apt-cacher-ng auto-apt-proxy
+    apt-get update
+    apt-get install -y zram-tools unattended-upgrades
     grep -q kubernetes /etc/apt-cacher-ng/acng.conf || echo "Remap-k8: apt.kubernetes.io ; https://apt.kubernetes.io" >> /etc/apt-cacher-ng/acng.conf
     systemctl restart apt-cacher-ng
     apt-get update
