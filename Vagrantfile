@@ -9,11 +9,9 @@ Vagrant.configure("2") do |config|
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
-  config.vm.provider "virtualbox" do |vb|
+  config.vm.provider "libvirt" do |vb|
     vb.memory = "256"
     vb.cpus = 1
-    vb.linked_clone = true
-    vb.default_nic_type = "virtio"
   end
 
   config.vm.provision "shell", inline: <<-SHELL
