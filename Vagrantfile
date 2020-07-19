@@ -9,9 +9,14 @@ Vagrant.configure("2") do |config|
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
-  config.vm.provider "libvirt" do |vb|
-    vb.memory = "256"
-    vb.cpus = 1
+  config.vm.provider "libvirt" do |l|
+    l.cpus = 1
+    l.memory = "256"
+    l.qemu_use_session = false
+    # Allow unmap in guest
+    l.disk_bus = "scsi"
+    # Restart on host reboot
+    #l.autostart = true
   end
 
   config.vm.provision "shell", inline: <<-SHELL
@@ -23,6 +28,7 @@ Vagrant.configure("2") do |config|
     grep -q kubernetes /etc/apt-cacher-ng/acng.conf || echo "Remap-k8: apt.kubernetes.io ; https://apt.kubernetes.io" >> /etc/apt-cacher-ng/acng.conf
     systemctl restart apt-cacher-ng
     apt-get update
+    systemctl enable fstrim.timer --now
   SHELL
 end
 
