@@ -1,13 +1,14 @@
-# Debian Buster with `apt-cacher-ng`
+# Debian Buster with `apt-cacher-ng` and docker proxy
 
-This `Vagrantfile` creates a small Debian Buster VM with `apt-cacher-ng` installed. `apt-cacher-ng` is a caching proxy for Debian packages, and may speed up your development.
+This `Vagrantfile` creates a small Debian Buster VM with `apt-cacher-ng` and a docker caching proxy installed. `apt-cacher-ng` is a caching proxy for Debian packages, and may speed up your development.
 
-VM is configured with `256MB` memory and port `3142` is forwarded to hosts `0.0.0.0`
+VM is configured with `368M` memory. Port `3142` and `5000` is forwarded to hosts `0.0.0.0`
 
 Packages installed.
 
 * `apt-cacher-ng`
 * `auto-apt-proxy`
+* `docker.io`
 * `unattended-upgrades`
 * `zram-tools`
 
