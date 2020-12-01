@@ -26,8 +26,7 @@ Vagrant.configure("2") do |config|
     apt-get update; apt-get install -y apt-cacher-ng auto-apt-proxy
     apt-get update; apt-get install -y zram-tools unattended-upgrades docker.io
 
-    #grep -q kubernetes /etc/apt-cacher-ng/acng.conf || echo "Remap-k8: apt.kubernetes.io
-    #https://apt.kubernetes.io" >> /etc/apt-cacher-ng/acng.conf
+    grep -q kubernetes /etc/apt-cacher-ng/acng.conf || echo "Remap-k8: apt.kubernetes.io https://apt.kubernetes.io" >> /etc/apt-cacher-ng/acng.conf
     systemctl restart apt-cacher-ng
     apt-get update
 
