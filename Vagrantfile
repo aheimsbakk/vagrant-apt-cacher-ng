@@ -35,10 +35,16 @@ Vagrant.configure("2") do |config|
       --restart unless-stopped \
       -d \
       -e REGISTRY_PROXY_REMOTEURL="https://registry-1.docker.io" \
+      -e REGISTRY_STORAGE_DELETE_ENABLED="true" \
       -p 5000:5000 \
       -v /srv/registry:/var/lib/registry \
       registry:2
 
+    cat <<EOF > /etc/cron.hourly/registry-cleanup
+#!/bin/bash
+[ \\$(docker ps -q --filter "name=registry" | wc -l)  -eq 1 ] && docker exec -t registry bin/registry garbage-collect -m /etc/docker/registry/config.yml | systemd-cat -t CRON_REGISTRY
+EOF
+    chmod +x /etc/cron.hourly/registry-cleanup
     systemctl enable fstrim.timer --now
   SHELL
 end
