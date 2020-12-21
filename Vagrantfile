@@ -2,30 +2,37 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
+  # use distro debian buster
   config.vm.box = "debian/buster64"
 
-  ## Use this if you don't have a bridge. apt-cache-ng and docker registry cacheing proxy.
-  #config.vm.network "forwarded_port", guest: 3142, host: 3142, host_ip: "0.0.0.0"
-  #config.vm.network "forwarded_port", guest: 5000, host: 5000, host_ip: "0.0.0.0"
-
-  # Use this if you have a bridge0. Give vagrant an "public" ip on computer bridge0.
-  config.vm.network "public_network", dev: "bridge0", mode: "bridge", type: "bridge", ip: "192.168.1.11"
-
-  # disable /vagrant sync folder
-  config.vm.synced_folder ".", "/vagrant", disabled: true
-
-  # set name
-  config.vm.hostname = "proxy"
-
+  # configure the libvirt provider for this vm
   config.vm.provider "libvirt" do |l|
-    l.cpus = 2
+    l.cpus = 1
     l.memory = "512"
+    # don't use user session, user need to be a member of the libvirt group
     l.qemu_use_session = false
-    # Allow unmap in guest
+    # allow unmap in guest, only allowed on iscsi devices
     l.disk_bus = "scsi"
+    ## in future we can enable unmap on snapshots and writing zeros
     #l.disk_driver discard: "unmap", detect_zeroes: "unmap"
-    # Restart on host reboot
+    # start vm on host start
     l.autostart = true
+  end
+
+  # define vm
+  config.vm.define "proxy" do |config|
+    ## use this if you don't have a bridge, apt-cache-ng and docker registry cacheing proxy
+    #config.vm.network "forwarded_port", guest: 3142, host: 3142, host_ip: "0.0.0.0"
+    #config.vm.network "forwarded_port", guest: 5000, host: 5000, host_ip: "0.0.0.0"
+
+    # use this if you have a bridge0, give vagrant an "public" ip on computer bridge0
+    config.vm.network "public_network", dev: "bridge0", mode: "bridge", type: "bridge", ip: "192.168.1.11"
+
+    # disable /vagrant sync folder
+    config.vm.synced_folder ".", "/vagrant", disabled: true
+
+    # set hostname
+    config.vm.hostname = "proxy"
   end
 
   config.vm.provision "shell", inline: <<-SHELL
