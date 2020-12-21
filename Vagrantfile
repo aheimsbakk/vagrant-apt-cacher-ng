@@ -20,6 +20,7 @@ Vagrant.configure("2") do |config|
     l.qemu_use_session = false
     # Allow unmap in guest
     l.disk_bus = "scsi"
+    #l.disk_driver discard: "unmap", detect_zeroes: "unmap"
     # Restart on host reboot
     l.autostart = true
   end
