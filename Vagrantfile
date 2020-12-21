@@ -14,6 +14,9 @@ Vagrant.configure("2") do |config|
   # disable /vagrant sync folder
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
+  # set name
+  config.vm.hostname = "proxy"
+
   config.vm.provider "libvirt" do |l|
     l.cpus = 2
     l.memory = "512"
@@ -28,7 +31,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: <<-SHELL
     export DEBIAN_FRONTEND=noninteractive
     apt-get update; apt-get install -y apt-cacher-ng auto-apt-proxy
-    apt-get update; apt-get install -y zram-tools unattended-upgrades docker.io ufw
+    apt-get update; apt-get install -y zram-tools unattended-upgrades docker.io ufw libnss-mdns
 
     ufw allow 22/tcp
     ufw allow 5000/tcp
@@ -52,8 +55,8 @@ Vagrant.configure("2") do |config|
     (( $(docker ps -q --filter "name=watchtower" | wc -l) == 1 )) || docker run \
       --name watchtower \
       --restart unless-stopped \
-      -v /var/run/docker.sock:/var/run/docker.sock \
       -d \
+      -v /var/run/docker.sock:/var/run/docker.sock \
       docker.io/containrrr/watchtower:latest -i 3600
 
     cat <<EOF > /etc/cron.hourly/registry-cleanup
