@@ -6,8 +6,11 @@ Vagrant.configure("2") do |config|
   config.vm.box_check_update = false
 
   # Use this if you don't have a bridge. apt-cache-ng and docker registry cacheing proxy.
-  config.vm.network "forwarded_port", guest: 3142, host: 3142, host_ip: "0.0.0.0"
-  config.vm.network "forwarded_port", guest: 5000, host: 5000, host_ip: "0.0.0.0"
+  #config.vm.network "forwarded_port", guest: 3142, host: 3142, host_ip: "0.0.0.0"
+  #config.vm.network "forwarded_port", guest: 5000, host: 5000, host_ip: "0.0.0.0"
+
+  # use this if you want a public network, change to you own brigde interface or remove for interactive configuration.
+  config.vm.network "public_network", bridge: "bridge0", ip: "192.168.1.11"
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
