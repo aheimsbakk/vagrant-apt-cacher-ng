@@ -2,15 +2,15 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/focal64"
+  config.vm.box = "debian/bookworm64"
   config.vm.box_check_update = false
 
   # Use this if you don't have a bridge. apt-cache-ng and docker registry cacheing proxy.
-  #config.vm.network "forwarded_port", guest: 3142, host: 3142, host_ip: "0.0.0.0"
-  #config.vm.network "forwarded_port", guest: 5000, host: 5000, host_ip: "0.0.0.0"
+  config.vm.network "forwarded_port", guest: 3142, host: 3142, host_ip: "0.0.0.0"
+  config.vm.network "forwarded_port", guest: 5000, host: 5000, host_ip: "0.0.0.0"
 
   # use this if you want a public network, change to you own brigde interface or remove for interactive configuration.
-  config.vm.network "public_network", bridge: "bridge0", ip: "192.168.1.11"
+  #config.vm.network "public_network", bridge: "bridge0", ip: "192.168.1.11"
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
@@ -20,14 +20,14 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider "virtualbox" do |vb|
     vb.cpus = 2
-    vb.memory = "512"
+    vb.memory = "1024"
     vb.linked_clone = true
   end
 
   config.vm.provision "apt cache", type: "shell", inline: <<-SHELL
     export DEBIAN_FRONTEND=noninteractive
     apt-get update
-    apt-get install -y apt-cacher-ng auto-apt-proxy zram-tools unattended-upgrades
+    apt-get install -y apt-cacher-ng auto-apt-proxy zram-tools unattended-upgrades ufw
 
     grep -q kubernetes /etc/apt-cacher-ng/acng.conf || echo "Remap-k8: apt.kubernetes.io https://apt.kubernetes.io" >> /etc/apt-cacher-ng/acng.conf
     systemctl restart apt-cacher-ng
